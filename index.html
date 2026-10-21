@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090d18">
+<title>PRIME Indicator Lab — XAU/USD</title>
+<style>
+:root{color-scheme:dark;--bg:#090d18;--panel:#111827;--panel2:#0c1422;--line:#263247;--muted:#91a0b8;--text:#e8eef8;--gold:#f5bf55;--green:#21c58e;--red:#f06d78;--blue:#7aa9ff;--shadow:0 18px 50px #0005}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 70% -10%,#1a2540 0,transparent 40%),var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,select,input{font:inherit;color:inherit}button{cursor:pointer}.shell{max-width:1600px;margin:auto;padding:20px 24px 36px}.topbar{height:52px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.16em}.brand-mark{width:30px;height:30px;display:grid;place-items:center;background:linear-gradient(145deg,#ffe59a,#d18c25);color:#17130c;border-radius:9px;font-weight:900}.top-actions{display:flex;gap:9px;align-items:center}.pill{border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:var(--muted);font-size:12px}.pill.live{color:var(--green);border-color:#21c58e66}.btn{background:#151e30;border:1px solid var(--line);border-radius:9px;padding:9px 12px;transition:.18s}.btn:hover{border-color:#61708b}.btn.primary{background:linear-gradient(135deg,#f4c568,#d89938);border:0;color:#1a160d;font-weight:800}.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px}.main{min-width:0}.panel{background:linear-gradient(180deg,#131b2a,#101725);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}.market-head{padding:17px 19px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:1px solid var(--line)}.instrument{display:flex;align-items:center;gap:12px}.coin{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ffe28e,#ad7021);color:#35270e;font-weight:900;font-size:18px}.instrument h1{font-size:17px;margin:0 0 2px}.sub{color:var(--muted);font-size:12px}.pricebox{text-align:right}.price{font-size:22px;font-weight:750}.change{font-size:12px;margin-top:2px}.toolbar{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);flex-wrap:wrap}.left-controls,.right-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.select{background:#0d1422;border:1px solid var(--line);border-radius:8px;padding:8px 10px}.chart-wrap{position:relative;padding:10px 12px 2px}.chart-head{display:flex;align-items:center;justify-content:space-between;padding:5px 5px 0 9px;color:var(--muted);font-size:11px;gap:10px;flex-wrap:wrap}.legend{display:flex;gap:13px;flex-wrap:wrap}.legend span{display:flex;align-items:center;gap:5px}.dot{width:7px;height:7px;border-radius:50%;display:inline-block}.chart-holder{height:470px;position:relative}.chart-holder canvas{width:100%;height:100%;display:block}.chart-foot{display:flex;justify-content:space-between;gap:10px;color:#74839a;font-size:10px;padding:0 10px 12px;flex-wrap:wrap}.status-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.stat{padding:13px 14px}.stat-label{color:var(--muted);font-size:10px;letter-spacing:.06em}.stat-value{font-size:15px;font-weight:700;margin-top:5px}.sidebar{padding:17px}.side-heading{display:flex;justify-content:space-between;align-items:center}.sidebar h2{font-size:14px;margin:0 0 2px}.bias-card{margin-top:14px;padding:15px;border:1px solid var(--line);border-radius:11px;background:#0c1422}.eyebrow{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}.bias{font-size:25px;font-weight:900;margin:4px 0}.bias.buy{color:var(--green)}.bias.sell{color:var(--red)}.bias.wait{color:var(--gold)}.scoreline{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px}.score{font-size:20px;font-weight:800}.score-caption{font-size:10px;color:var(--muted)}.meter{height:6px;border-radius:9px;background:#263146;margin-top:7px;overflow:hidden}.meter span{display:block;height:100%;width:50%;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));transition:width .25s}.trade-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.trade-level{padding:9px;border:1px solid #ffffff10;border-radius:8px;background:#ffffff05}.trade-level span{display:block;font-size:9px;color:var(--muted);letter-spacing:.1em}.trade-level b{display:block;font-size:13px;margin-top:3px}.section-title{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:18px 0 8px}.mode-select{width:100%;background:#0b1220;border:1px solid var(--line);border-radius:8px;padding:9px}.note{color:var(--muted);font-size:10px;line-height:1.55;margin:9px 0 0}.factor{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #ffffff0a;font-size:11px}.factor:last-child{border-bottom:0}.factor span{color:var(--muted)}.factor b{white-space:nowrap}.factor .up{color:var(--green)}.factor .down{color:var(--red)}.factor .na{color:#8290a6}.feed-status{padding:9px;border-radius:8px;background:#ffffff08;color:var(--muted);font-size:10px;line-height:1.5;margin-top:12px;overflow-wrap:anywhere}.hook-input{width:100%;margin:7px 0;background:#0b1220;border:1px solid var(--line);border-radius:7px;padding:9px;font-size:11px}.hook-status{font-size:10px;color:var(--muted);margin-top:8px;min-height:16px}.check{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:10px;margin:8px 0}.check input{accent-color:#e4b751}.disclaimer{font-size:10px;color:#6e7b90;margin-top:14px;text-align:center}.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;background:#182337;border:1px solid #3b4b66;border-radius:9px;padding:10px 14px;font-size:12px;transition:.2s;pointer-events:none;z-index:20}.toast.show{opacity:1;transform:translate(-50%,0)}.chart-mode .sidebar,.chart-mode .status-row{display:none}.chart-mode .layout{grid-template-columns:1fr}.chart-mode .chart-holder{height:68vh}@media(max-width:1050px){.layout{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.sidebar>.side-heading,.sidebar>.bias-card,.sidebar>.feed-status{grid-column:span 2}.chart-holder{height:420px}}@media(max-width:650px){.shell{padding:12px}.topbar{margin-bottom:12px}.top-actions .pill{display:none}.market-head{padding:13px}.price{font-size:18px}.toolbar{padding:10px}.chart-holder{height:330px}.status-row{grid-template-columns:repeat(2,1fr)}.sidebar{display:block}.sidebar>*{grid-column:auto!important}.chart-head{align-items:flex-start;flex-direction:column}}
+</style>
+<style>
+/* Visual polish and responsive layout overrides. Indicator and feed logic are unchanged. */
+:root{--line:#29364c;--muted:#9aa9c1;--shadow:0 18px 48px #0006}
+body{background:radial-gradient(ellipse at 72% -12%,#202d49 0,transparent 42%),linear-gradient(180deg,#0a1020,#090d18 55%);letter-spacing:.005em}
+.shell{padding-top:24px}
+.topbar{height:auto;min-height:52px}
+.brand{font-size:14px;letter-spacing:.2em}
+.brand-mark{box-shadow:0 5px 20px #d18c2533}
+.panel{border-color:#2a3850;background:linear-gradient(155deg,#151f31 0%,#101827 72%);box-shadow:0 16px 42px #0004;transition:border-color .18s,box-shadow .18s}
+.main>.panel{overflow:hidden}
+.market-head{background:linear-gradient(100deg,#18243a,#121b2b 68%,#111a29)}
+.instrument h1{font-size:18px;letter-spacing:-.025em}
+.price{font-variant-numeric:tabular-nums;letter-spacing:-.035em}
+.toolbar{background:#101827}
+.pill{background:#ffffff04;white-space:nowrap}
+.btn,.select,.mode-select,.hook-input{transition:border-color .18s,background-color .18s,box-shadow .18s}
+.btn:hover{background:#1c2940;box-shadow:0 4px 16px #0003}
+.btn.primary:hover{background:linear-gradient(135deg,#ffdc88,#e5a746)}
+.btn:focus-visible,.select:focus-visible,.mode-select:focus-visible,.hook-input:focus-visible{outline:2px solid #f5bf55;outline-offset:2px}
+.chart-wrap{padding-top:14px}
+.chart-head{font-size:12px}
+.status-row{gap:12px}
+.stat{padding:15px 16px;min-width:0}
+.stat-value{font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.sidebar{align-self:start}
+.bias-card{background:linear-gradient(145deg,#0d1728,#0b1321);border-color:#34445e}
+.trade-level{background:#ffffff07;border-color:#ffffff12}
+.factor{align-items:baseline}
+.feed-status{border:1px solid #ffffff0a}
+@media(max-width:1050px){
+ .layout{gap:14px}
+ .sidebar{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+ .sidebar>.side-heading,.sidebar>.bias-card,.sidebar>.feed-status{grid-column:1/-1}
+ .chart-holder{height:clamp(340px,52vw,440px)}
+}
+@media(max-width:700px){
+ .shell{padding:13px 12px 24px}
+ .topbar{margin-bottom:13px;gap:10px}
+ .top-actions{gap:7px}
+ .top-actions .pill{display:none}
+ .btn{padding:8px 10px}
+ .layout{gap:12px}
+ .panel{border-radius:12px}
+ .market-head{padding:14px;gap:12px;align-items:center}
+ .instrument{gap:9px;min-width:0}
+ .coin{width:34px;height:34px;flex:0 0 34px}
+ .instrument h1{font-size:15px}
+ .instrument h1 .sub{font-size:11px}
+ .instrument .sub{font-size:10px;line-height:1.45}
+ .price{font-size:18px}
+ .pricebox{min-width:100px}
+ .toolbar{padding:10px 12px;gap:9px}
+ .left-controls,.right-controls{gap:6px}
+ .toolbar .pill{padding:6px 8px;font-size:10px}
+ .chart-wrap{padding:11px 8px 0}
+ .chart-head{padding:3px 5px 0;gap:8px}
+ .legend{gap:9px;font-size:10px}
+ .chart-holder{height:clamp(255px,70vw,360px)}
+ .chart-foot{padding:2px 7px 11px;font-size:9px}
+ .status-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:11px}
+ .stat{padding:11px 12px}
+ .stat-label{font-size:9px}
+ .stat-value{font-size:14px}
+ .sidebar{display:block;padding:14px}
+ .sidebar>*{grid-column:auto!important}
+ .sidebar .side-heading{display:flex}
+ .bias-card{margin-top:12px;padding:13px}
+ .trade-grid{gap:7px}
+ .trade-level{padding:8px}
+ .section-title{margin-top:15px}
+ .hook-input{font-size:12px}
+ .disclaimer{line-height:1.5;padding:0 5px}
+}
+@media(max-width:390px){
+ .shell{padding:10px 9px 20px}
+ .brand{gap:8px;font-size:12px}
+ .brand-mark{width:28px;height:28px}
+ .market-head{padding:12px;align-items:flex-start}
+ .instrument{gap:7px}
+ .coin{width:30px;height:30px;flex-basis:30px;font-size:15px}
+ .instrument h1{font-size:13px}
+ .instrument h1 .sub{font-size:10px}
+ .instrument .sub{max-width:185px;font-size:9px}
+ .pricebox{min-width:84px}
+ .price{font-size:16px}
+ .change{font-size:10px}
+ .toolbar .pill{padding:5px 7px;font-size:9px}
+ .chart-holder{height:255px}
+ .legend{gap:7px;font-size:9px}
+ .stat{padding:10px}
+ .stat-label{letter-spacing:.03em;font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+/* Phone-first product layout: keep the same narrow, single-column interface at every viewport. */
+body{min-width:320px;background:radial-gradient(ellipse at 50% -8%,#1a2945 0,transparent 36%),#080d17}
+.shell{width:min(100%,480px);min-height:100vh;margin-inline:auto;padding:14px 12px 24px}
+.topbar{position:sticky;top:0;z-index:10;margin:0 -12px 12px;padding:8px 12px;background:#0a101deF;backdrop-filter:blur(16px);border-bottom:1px solid #ffffff0b}
+.layout{display:flex;flex-direction:column;gap:11px}
+.main{display:contents}
+.sidebar{order:0;width:100%;padding:14px}
+.main>.panel{order:1;width:100%}
+.status-row{order:2;margin-top:0}
+.market-head{align-items:center;gap:8px;padding:12px}
+.chart-holder{height:290px}
+.toolbar{gap:7px}
+.left-controls,.right-controls{gap:5px}
+.right-controls{width:100%;padding-top:2px}
+.right-controls .pill{flex:1;text-align:center}
+.bias-card{margin-top:10px;padding:13px}
+.bias{font-size:29px;line-height:1.1}
+.scoreline{margin-top:10px}
+.trade-grid{gap:7px}
+.mode-select,.hook-input,.btn{min-height:42px}
+.check{min-height:34px}
+.section-title{margin-top:14px}
+.sidebar .note{font-size:11px}
+.feed-status{font-size:10px}
+.status-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stat{border-radius:11px;padding:11px 12px}
+.main>.panel{border-radius:13px}
+.chart-wrap{padding:10px 7px 0}
+.chart-head{padding-inline:5px}
+.chart-foot{line-height:1.45}
+.disclaimer{max-width:430px;margin:12px auto 0;font-size:9px}
+.toast{width:calc(100% - 30px);max-width:440px;text-align:center}
+.chart-holder{overflow:hidden;border-radius:8px;background:#0b111b}
+.chart-holder>canvas{display:none!important}
+.tradingview-widget-container{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+.tradingview-widget-container__widget{width:100%;height:calc(100% - 24px)}
+.tradingview-widget-copyright{height:24px;padding:3px 7px;color:#8290a6;font-size:10px;line-height:18px;background:#101827}
+.tradingview-widget-copyright a{color:#a9bad4;text-decoration:none}
+@media(max-width:360px){
+ .shell{padding-inline:9px}
+ .topbar{margin-inline:-9px;padding-inline:9px}
+ .instrument .sub{max-width:155px}
+ .pricebox{min-width:78px}
+ .price{font-size:15px}
+ .chart-holder{height:260px}
+ .bias-card{padding:11px}
+ .trade-level b{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar"><div class="brand"><span class="brand-mark">P</span><span>PRIME</span></div><div class="top-actions"><span class="pill live" id="livePill">● CONNECTING PRICE FEED</span><button class="btn" id="refreshBtn">↻ Refresh</button></div></header>
+<main class="layout"><section class="main">
+<div class="panel">
+<div class="market-head"><div class="instrument"><div class="coin">Au</div><div><h1>Gold Spot <span class="sub">/ U.S. Dollar</span></h1><div class="sub">XAU/USD · 15 minute · live indicative spot + sampled candles</div></div></div><div class="pricebox"><div class="price" id="lastPrice">Loading…</div><div class="change" id="priceChange">Waiting for live quote</div></div></div>
+<div class="toolbar"><div class="left-controls"><span class="pill">XAU/USD</span><span class="pill">15m</span><span class="pill" id="barStatus">Waiting for candles</span></div><div class="right-controls"><span class="pill">Market structure</span><span class="pill">Price momentum</span><span class="pill">ATR risk</span></div></div>
+<div class="chart-wrap"><div class="chart-head"><div id="chartCaption">TradingView · OANDA:XAUUSD · 15m</div><div class="legend"><span><i class="dot" style="background:#21c58e"></i>Live market chart</span><span>Powered by TradingView</span></div></div><div class="chart-holder"><canvas id="priceChart" aria-hidden="true"></canvas><div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div><div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/OANDA-XAUUSD/" target="_blank" rel="noopener nofollow">XAUUSD chart</a> · TradingView</div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>{"autosize":true,"symbol":"OANDA:XAUUSD","interval":"15","timezone":"Etc/UTC","theme":"dark","style":"1","locale":"en","backgroundColor":"#101827","gridColor":"rgba(120,134,156,0.12)","hide_top_toolbar":false,"hide_side_toolbar":true,"allow_symbol_change":false,"save_image":false,"calendar":false,"withdateranges":false,"details":false,"hotlist":false,"hide_legend":false,"hide_volume":false,"studies":[],"support_host":"https://www.tradingview.com"}</script></div></div><div class="chart-foot"><span>Live XAU/USD chart from TradingView. Signal calculations continue using the dashboard’s XAUS spot feed.</span><span id="sourceLine">Signal feed: waiting</span></div></div>
+</div>
+<div class="status-row"><div class="panel stat"><div class="stat-label">LIVE PRICE</div><div class="stat-value" id="statPrice">—</div></div><div class="panel stat"><div class="stat-label">CLOSED 15M CANDLES</div><div class="stat-value" id="statBars">—</div></div><div class="panel stat"><div class="stat-label">RSI (14)</div><div class="stat-value" id="statRsi">—</div></div><div class="panel stat"><div class="stat-label">ATR (14)</div><div class="stat-value" id="statAtr">—</div></div></div>
+</section>
+<aside class="panel sidebar"><div class="side-heading"><div><h2>Prime-style Indicator</h2><div class="sub">Local model · live XAU/USD price feed</div></div><span class="pill" id="modeBadge">INTRADAY</span></div>
+<div class="bias-card"><div class="eyebrow">Transparent price-derived proxy · not Prime exact formula</div><div class="bias wait" id="bias">WAIT</div><div class="scoreline"><span class="score" id="score">— / 100</span><span class="score-caption">Model score, not win probability</span></div><div class="meter"><span id="meterFill"></span></div><div class="note" id="signalReason">Waiting for enough fresh closed candles.</div><div class="trade-grid"><div class="trade-level"><span>ENTRY</span><b id="entryOut">—</b></div><div class="trade-level"><span>STOP LOSS</span><b id="stopOut">—</b></div><div class="trade-level"><span>TAKE PROFIT 1 · 1R</span><b id="tp1Out">—</b></div><div class="trade-level"><span>TAKE PROFIT 2 · 2R</span><b id="tp2Out">—</b></div></div><div class="note" id="planNote">WAIT has no active trade plan.</div></div>
+<div class="section-title">Signal mode</div><select class="mode-select" id="signalMode"><option value="intraday">Intraday</option><option value="scalp">Scalp</option><option value="balanced">Balanced</option><option value="swing">Swing</option><option value="macro">Macro Confirmation</option></select><div class="note" id="modeNote">Intraday: candle structure + price momentum proxy.</div>
+<div class="section-title">Local model layers</div><div class="factor"><span>Trend / structure · EMA 20/50</span><b id="trendFactor" class="na">—</b></div><div class="factor"><span>Price momentum · candle return</span><b id="momentumFactor" class="na">—</b></div><div class="factor"><span>Range position · DOM proxy</span><b id="rangeFactor" class="na">—</b></div><div class="factor"><span>Wick response · absorption proxy</span><b id="wickFactor" class="na">—</b></div><div class="factor"><span>True order book / L2</span><b class="na">Unavailable for this feed</b></div><div class="factor"><span>True traded-volume CVD</span><b class="na">Unavailable for this feed</b></div><div class="factor"><span>Footprint trades</span><b class="na">Unavailable for this feed</b></div><div class="factor"><span>Macro calendar</span><b class="na">Not connected</b></div>
+<div class="feed-status" id="feedStatus">Connecting to the live data source…</div>
+<div class="section-title">Live signal webhook</div><input class="hook-input" id="webhookUrl" type="url" placeholder="https://your-server.example/webhook" autocomplete="off"><label class="check"><input type="checkbox" id="webhookEnabled"> Send signal changes automatically</label><button class="btn" id="sendWebhookTest" style="width:100%">Send test webhook</button><div class="hook-status" id="hookStatus" aria-live="polite">Webhook off. No signal data is sent.</div>
+</aside></main>
+<div class="disclaimer">Signal score is a transparent local approximation from price data. It is not the proprietary Prime formula or a calibrated probability. Spot quotes are indicative, may be delayed, and are not broker execution prices.</div>
+</div><div class="toast" id="toast"></div>
+<script>
+(()=>{
+ const $=id=>document.getElementById(id),canvas=$('priceChart'),ctx=canvas.getContext('2d');
+ const SPOT_URL='https://xaus.com/api/v1/spot?compact=1';
+ const SERIES_URL='https://xaus.com/api/v1/intraday?symbol=xau&hours=48';
+ const MODES={
+  scalp:{label:'SCALP',threshold:.34,weights:[.28,.30,.18,.24],note:'Scalp: faster candle-structure and price-momentum proxy; no order-flow feed.'},
+  intraday:{label:'INTRADAY',threshold:.30,weights:[.38,.25,.20,.17],note:'Intraday: EMA trend, candle structure and price-momentum proxy; not the exact Prime formula.'},
+  balanced:{label:'BALANCED',threshold:.34,weights:[.34,.24,.24,.18],note:'Balanced: broader agreement across candle structure, momentum, range and wick response.'},
+  swing:{label:'SWING',threshold:.38,weights:[.46,.18,.24,.12],note:'Swing: more weight on EMA trend and recent candle structure; local proxy only.'},
+  macro:{label:'MACRO',threshold:.42,weights:[.48,.16,.24,.12],note:'Macro mode remains a price-only approximation; calendar risk is unavailable.'}
+ };
+ const state={bars:[],fast:[],slow:[],price:null,spotTime:null,seriesTime:null,score:null,signal:'WAIT',features:null,atr:null,mode:'intraday',timer:null};
+ const fmt=n=>Number.isFinite(n)?n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
+ const clamp=(v,a=-1,b=1)=>Math.max(a,Math.min(b,v));
+ const mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0
+ function ema(values,period){let k=2/(period+1),out=[],v=values[0];values.forEach((x,i)=>{v=i?x*k+v*(1-k):x;out.push(v)});return out};
+ 
+ function rsi(values,period=14){if(values.length<=period)return 50;let g=0,l=0;for(let i=1;i<=period;i++){let d=values[i]-values[i-1];g+=Math.max(d,0);l+=Math.max(-d,0)}g/=period;l/=period;for(let i=period+1;i<values.length;i++){let d=values[i]-values[i-1];g=(g*(period-1)+Math.max(d,0))/period;l=(l*(period-1)+Math.max(-d,0))/period}return l===0?100:100-100/(1+g/l)}
+ function aggregate(points){const groups=new Map();for(const p of points||[]){if(!Number.isFinite(p.t)||!Number.isFinite(p.p))continue;const t=Math.floor(p.t/900)*900;let b=groups.get(t);if(!b){b={t,o:p.p,h:p.p,l:p.p,c:p.p,samples:0};groups.set(t,b)}b.h=Math.max(b.h,p.p);b.l=Math.min(b.l,p.p);b.c=p.p;b.samples++}const currentBucket=Math.floor(Date.now()/900000)*900;return [...groups.values()].filter(b=>b.t+900<=currentBucket&&b.samples>=2).sort((a,b)=>a.t-b.t)}
+ function calculate(){const bars=state.bars;if(bars.length<52){state.signal='WAIT';state.score=null;state.features=null;renderPanel('Need at least 52 closed sampled candles for the EMA 50 trend proxy.');return}const closes=bars.map(b=>b.c),fast=ema(closes,20),slow=ema(closes,50),rr=rsi(closes,14),last=bars.at(-1),recent=bars.slice(-20),hi=Math.max(...recent.map(b=>b.h)),lo=Math.min(...recent.map(b=>b.l)),range=Math.max(.01,hi-lo),atrVals=[];for(let i=Math.max(1,bars.length-14);i<bars.length;i++){const b=bars[i],prev=bars[i-1].c;atrVals.push(Math.max(b.h-b.l,Math.abs(b.h-prev),Math.abs(b.l-prev)))}const atr=Math.max(mean(atrVals),.01),trend=clamp(.62*clamp((fast.at(-1)-slow.at(-1))/(atr*1.5))+.38*clamp((fast.at(-1)-fast[Math.max(0,fast.length-5)])/(atr||1))),momentum=clamp((closes.at(-1)-closes.at(-5))/(atr*1.5)),rangeLocation=clamp(((last.c-lo)/range-.5)*2),candleRange=Math.max(.0001,last.h-last.l),lowerWick=Math.max(0,Math.min(last.o,last.c)-last.l),upperWick=Math.max(0,last.h-Math.max(last.o,last.c)),wickResponse=clamp((lowerWick-upperWick)/candleRange),mode=MODES[state.mode],features=[trend,momentum,rangeLocation,wickResponse],raw=features.reduce((s,x,i)=>s+x*mode.weights[i],0),score=Math.round(50+50*raw),aligned=features.filter(x=>Math.sign(x)===Math.sign(raw)&&Math.abs(x)>.12).length,direction=raw>=mode.threshold&&aligned>=3?'BUY':raw<=-mode.threshold&&aligned>=3?'SELL':'WAIT';state.fast=fast;state.slow=slow;state.atr=atr;const previousSignal=state.signal;state.score=score;state.signal=direction;state.features=features;state.rsi=rr;state.lastClosed=last;renderChart();renderPanel(direction==='WAIT'?'Local price proxies did not meet the transparent threshold/agreement rule. Real order book, traded-volume CVD, footprint trades and calendar are unavailable.':`${aligned}/4 price proxies agree. EMA 20/50 are trend inputs; this remains an approximation.`);if(direction!==previousSignal)sendSignal(direction)}
+ function renderPanel(reason){const sig=state.signal,mode=MODES[state.mode];$('bias').textContent=sig;$('bias').className='bias '+(sig==='BUY'?'buy':sig==='SELL'?'sell':'wait');$('modeBadge').textContent=mode.label;$('modeNote').textContent=mode.note;$('signalReason').textContent=reason;$('score').textContent=state.score===null?'— / 100':`${state.score} / 100`;$('meterFill').style.width=`${state.score??50}%`;
+  const ids=['trendFactor','momentumFactor','rangeFactor','wickFactor'],weights=mode.weights;if(state.features){state.features.forEach((v,i)=>{const el=$(ids[i]),points=v*weights[i]*50;el.textContent=`${points>=0?'+':''}${points.toFixed(1)} pts`;el.className=points>0?'up':points<0?'down':'na'})}else ids.forEach(id=>{$(id).textContent='—';$(id).className='na'});
+  const live=Number.isFinite(state.price)?state.price:null;const plan=state.signal!=='WAIT'&&live&&state.atr;const risk=plan?state.atr*1.2:null;if(plan){const sign=state.signal==='BUY'?1:-1;$('entryOut').textContent=fmt(live);$('stopOut').textContent=fmt(live-sign*risk);$('tp1Out').textContent=fmt(live+sign*risk);$('tp2Out').textContent=fmt(live+sign*2*risk);$('planNote').textContent=`Provisional price-only levels · 1R=${fmt(risk)} · recalculates with the spot quote.`}else{$('entryOut').textContent='—';$('stopOut').textContent='—';$('tp1Out').textContent='—';$('tp2Out').textContent='—';$('planNote').textContent='WAIT has no active trade plan; price levels are intentionally withheld.'}
+  if(state.price){$('lastPrice').textContent=fmt(state.price);$('statPrice').textContent=fmt(state.price)}if(Number.isFinite(state.rsi))$('statRsi').textContent=state.rsi.toFixed(1);if(Number.isFinite(state.atr))$('statAtr').textContent=fmt(state.atr);$('statBars').textContent=String(state.bars.length);$('livePill').textContent=state.price?'● LIVE PRICE':'● WAITING FOR FEED';$('livePill').className='pill '+(state.price?'live':'');
+ }
+ function renderChart(){const bars=state.bars.slice(-80),fast=state.fast.slice(-80),slow=state.slow.slice(-80);if(!bars.length)return;const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1,w=rect.width,h=rect.height;canvas.width=Math.max(1,Math.round(w*dpr));canvas.height=Math.max(1,Math.round(h*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);const pad={l:10,r:74,t:18,b:20},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b,all=bars.flatMap(b=>[b.h,b.l]),min=Math.min(...all),max=Math.max(...all),range=max-min||1,y=v=>pad.t+(max-v)/range*ch,x=i=>pad.l+(i+.5)*cw/bars.length;ctx.font='10px system-ui';ctx.textBaseline='middle';for(let j=0;j<=5;j++){const yy=pad.t+j*ch/5,val=max-j*range/5;ctx.strokeStyle='#273247';ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillStyle='#78869c';ctx.fillText(fmt(val),w-pad.r+7,yy)}const bw=Math.max(2,Math.min(9,cw/bars.length*.56));bars.forEach((b,i)=>{const xx=x(i),up=b.c>=b.o,color=up?'#21c58e':'#f06d78';ctx.strokeStyle=color;ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(xx,y(b.h));ctx.lineTo(xx,y(b.l));ctx.stroke();const top=y(Math.max(b.o,b.c)),bh=Math.max(1,Math.abs(y(b.o)-y(b.c)));ctx.fillRect(xx-bw/2,top,bw,bh)});const line=(arr,color)=>{ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=1.5;arr.forEach((v,i)=>i?ctx.lineTo(x(i),y(v)):ctx.moveTo(x(i),y(v)));ctx.stroke()};if(fast.length===bars.length)line(fast,'#f5bf55');if(slow.length===bars.length)line(slow,'#7aa9ff');if(Number.isFinite(state.price)){const yy=y(Math.max(min,Math.min(max,state.price)));ctx.setLineDash([4,3]);ctx.strokeStyle='#ffffff88';ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#d9e2f2';ctx.fillRect(w-pad.r+1,yy-9,70,18);ctx.fillStyle='#101725';ctx.font='bold 10px system-ui';ctx.fillText(fmt(state.price),w-pad.r+5,yy)} }
+ function getWebhookEndpoint(){let u;try{u=new URL($('webhookUrl').value)}catch{return null}return u.protocol==='https:'?u:null}
+ async function sendSignal(sig){if(!$('webhookEnabled').checked)return;const endpoint=getWebhookEndpoint(),status=$('hookStatus');if(!endpoint){status.textContent='Auto-send enabled, but enter a valid HTTPS receiver URL.';return}const sign=sig==='BUY'?1:sig==='SELL'?-1:0,risk=state.atr?state.atr*1.2:null;const payload={event:'prime_style_signal_change',symbol:'XAUUSD',timeframe:'15m',mode:MODES[state.mode].label,signal:sig,confluence:state.score,price:state.price,entry:sig==='WAIT'?null:state.price,stopLoss:sig==='WAIT'||!risk?null:state.price-sign*risk,tp1:sig==='WAIT'||!risk?null:state.price+sign*risk,tp2:sig==='WAIT'||!risk?null:state.price+sign*2*risk,generatedAt:new Date().toISOString(),source:'PRIME local price-only model'};status.textContent=`Sending ${sig} signal update…`;try{const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});status.textContent=response.ok?`Signal update delivered (HTTP ${response.status}).`:`Receiver responded with HTTP ${response.status}.`}catch{status.textContent='Signal POST attempted; browser cannot confirm delivery. Check receiver CORS and availability.'}} async function refresh(){const pill=$('livePill');pill.textContent='● UPDATING';try{const [sr,ir]=await Promise.all([fetch(SPOT_URL,{cache:'no-store'}),fetch(SERIES_URL,{cache:'no-store'})]);if(!sr.ok||!ir.ok)throw new Error(`Data API HTTP ${sr.status}/${ir.status}`);const [spot,series]=await Promise.all([sr.json(),ir.json()]);const quote=Number(spot.spot_usd_oz),spotTime=Date.parse(spot.price_as_of||spot.updated_at),seriesTime=Date.parse(series.data_state?.as_of);if(!Number.isFinite(quote)||!Array.isArray(series.points))throw new Error('Feed returned no real XAU/USD data');state.price=quote;state.spotTime=spotTime;state.seriesTime=seriesTime;state.bars=aggregate(series.points);const now=Date.now(),spotAge=(now-spotTime)/1000,seriesAge=(now-seriesTime)/1000;const fresh=spot.data_state?.status==='fresh'&&series.data_state?.status==='fresh'&&spotAge>=-60&&spotAge<240&&seriesAge>=-60&&seriesAge<900;const last=state.bars.at(-1);$('priceChange').textContent=last?`${quote-last.c>=0?'+':''}${fmt(quote-last.c)} vs last closed candle · source timestamp ${new Date(spotTime).toLocaleTimeString()}`:'Live quote · candle history warming up';$('priceChange').style.color=last&&quote>=last.c?'var(--green)':'var(--red)';$('barStatus').textContent=`${state.bars.length} closed 15m bars`;$('chartCaption').textContent='TradingView · OANDA:XAUUSD · 15m';$('sourceLine').textContent=`Signal feed: XAUS sampler (${series.source||'gold spot sampler'}) · updated ${Number.isFinite(seriesTime)?new Date(seriesTime).toLocaleTimeString():'unknown'}`;$('feedStatus').textContent=`Spot: ${spot.data_state?.status||'unknown'} from ${spot.price_source||spot.source||'source not reported'} · ${Math.max(0,Math.round(spotAge))}s old. 5m sampled series: ${series.data_state?.status||'unknown'} · ${Math.max(0,Math.round(seriesAge))}s old · ${series.count||series.points.length} points · ${series.coverage_seconds?Math.round(series.coverage_seconds/3600*10)/10:0}h coverage. This source has no order book, true volume delta/CVD, footprint, or macro calendar.`;if(fresh){calculate()}else{state.signal='WAIT';state.score=null;state.features=null;renderPanel('Feed is stale or unavailable; live signals are paused until fresh real prices arrive.');$('feedStatus').textContent+=' Signals paused for stale feed.'}if(last){$('statBars').textContent=String(state.bars.length)} }catch(err){$('livePill').textContent='● FEED ERROR';$('livePill').className='pill';$('feedStatus').textContent=`Live feed failed: ${err.message}. No sample fallback is used; refresh when the API is available.`;state.signal='WAIT';state.score=null;state.features=null;renderPanel('No live data: model paused, no demo values shown.')} }
+ $('signalMode').addEventListener('change',e=>{state.mode=e.target.value;if(state.bars.length)calculate();else renderPanel('Waiting for enough fresh closed candles.')});$('refreshBtn').addEventListener('click',refresh);$('sendWebhookTest').addEventListener('click',async()=>{const input=$('webhookUrl'),status=$('hookStatus');let endpoint;try{endpoint=new URL(input.value)}catch{status.textContent='Enter a valid HTTPS webhook URL.';return}if(endpoint.protocol!=='https:'){status.textContent='Webhook URL must use HTTPS.';return}status.textContent='Sending the test payload to the URL you entered…';try{const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'prime_dashboard_test',source:'PRIME local dashboard',sentAt:new Date().toISOString()})});status.textContent=response.ok?`Test delivered (HTTP ${response.status}).`:`Receiver responded with HTTP ${response.status}.`}catch{status.textContent='Browser could not confirm delivery. Check the URL, receiver availability, and CORS settings.'}});$('webhookEnabled').addEventListener('change',()=>{$('hookStatus').textContent=$('webhookEnabled').checked?'Auto-send enabled. Only future signal changes will be sent.':'Auto-send disabled.'});window.addEventListener('resize',renderChart);refresh();state.timer=setInterval(refresh,60000);
+})();
+</script>
+</body></html>
+
+
+
