@@ -14,8 +14,8 @@
 <main class="grid"><section class="card"><div class="head"><div><div class="title">Gold Spot / U.S. Dollar</div><div class="muted">FX_IDC:XAUUSD chart · Gold API spot quote</div></div><div style="text-align:right"><div class="price" id="price">—</div><div id="change" class="muted">Waiting for feed</div></div></div><div id="chart" class="chart"></div><div class="note">TradingView FX_IDC:XAUUSD chart · Bid/ask and real order-flow require a separate quote provider.</div><div class="error" id="error"></div></section>
 <aside class="card"><div class="head"><div><div class="title">Signal snapshot</div><div class="muted" id="updated">Waiting for live data</div></div><span class="pill" id="tfLabel">15 MIN</span></div><div class="signalwrap"><div class="signal"><div class="pair"><div><div class="eyebrow">Current bias</div><div id="signal" class="word wait">WAIT</div></div><div style="text-align:right"><div id="score" class="score">—<span style="font-size:12px;color:var(--muted)">/99</span></div><div class="muted">Signal score</div></div></div><div class="meter"><div id="fill" class="fill"></div></div><div id="summary" class="small">Live feed load hone ke baad signal calculate hoga.</div></div>
 <div class="metrics"><div class="metric"><div class="label">Delta proxy · window</div><div id="delta" class="val">—</div><div class="foot">Candle-direction weighted tick volume</div></div><div class="metric"><div class="label">CVD proxy · window</div><div id="cvd" class="val">—</div><div class="foot">Cumulative candle-direction proxy</div></div><div class="metric"><div class="label">Imbalance</div><div id="imb" class="val">—</div><div class="foot">Candle-direction proxy</div></div><div class="metric"><div class="label">Spread</div><div id="spread" class="val">—</div><div class="foot">Current bid–ask</div></div><div class="metric"><div class="label">Momentum proxy</div><div id="alpha" class="val">—</div><div class="foot">Momentum proxy, not vendor α</div></div><div class="metric"><div class="label">Price trend</div><div id="trend" class="val">—</div><div class="foot">EMA 9 / EMA 21</div></div></div></div>
-<div class="section"><div class="sectiontitle">Signal checks</div><div class="check"><span>Delta direction</span><span id="dc" class="pill warn">Waiting</span></div><div class="check"><span>CVD direction</span><span id="cc" class="pill warn">Waiting</span></div><div class="check"><span>Price structure</span><span id="tc" class="pill warn">Waiting</span></div><div class="check"><span>Spread filter</span><span id="sc" class="pill warn">Waiting</span></div></div></aside></main>
-<div class="warning"><b>Important:</b> 0–99 is a directional score, not a verified win probability. TradingView chart data is isolated inside an embedded widget, so this page cannot read its candles or bid/ask directly. Delta/CVD/imbalance below are candle-direction proxies using tickVolume when available, not true aggressor-side order flow or real footprint data. “Index α” is a transparent momentum proxy, not Guardeer Prime’s private formula. No trade outcome is guaranteed.</div><div class="footer">TradingView chart · spot quote refreshes every 15 seconds; order-flow proxies are candle-derived</div></div>
+<div class="section"><div class="sectiontitle">Higher-timeframe Order Block · Support / Resistance</div><div class="check"><span>HTF Bullish OB · Support</span><span id="htfSupport" class="pill warn">Calculating…</span></div><div class="check"><span>HTF Bearish OB · Resistance</span><span id="htfResistance" class="pill warn">Calculating…</span></div><div class="check"><span>OB direction</span><span id="htfBias" class="pill warn">Waiting</span></div><div class="sectiontitle" style="margin-top:12px">OB-based trade levels (RR 1:2 / 1:3)</div><div class="check"><span>Entry</span><b id="planEntry">—</b></div><div class="check"><span>Stop Loss</span><b id="planSL">—</b></div><div class="check"><span>Take Profit 1</span><b id="planTP1">—</b></div><div class="check"><span>Take Profit 2</span><b id="planTP2">—</b></div><div class="foot">4H zones are candle-based OB proxies (fallback zones marked proxy), not the original Pine indicator. SL/TP are indicative 2R/3R levels, not trade advice.</div></div><div class="section"><div class="sectiontitle">Signal checks</div><div class="check"><span>Delta direction</span><span id="dc" class="pill warn">Waiting</span></div><div class="check"><span>CVD direction</span><span id="cc" class="pill warn">Waiting</span></div><div class="check"><span>Price structure</span><span id="tc" class="pill warn">Waiting</span></div><div class="check"><span>Spread filter</span><span id="sc" class="pill warn">Waiting</span></div></div></aside></main>
+<div class="warning"><b>Important:</b> 0–99 is a directional score, not a verified win probability. TradingView chart data is isolated inside an embedded widget, so this page cannot read its candles or bid/ask directly. Delta/CVD/imbalance below are candle-direction proxies using tickVolume when available, not true aggressor-side order flow or real footprint data. “Index α” is a transparent momentum proxy, not Guardeer Prime’s private formula. No trade outcome is guaranteed.</div><div class="footer">TradingView chart · spot quote refreshes every 1 second; order-flow proxies are candle-derived</div></div>
 <script>
 const $=id=>document.getElementById(id);
 let tf='15m';
@@ -59,20 +59,61 @@ function chart(){
 }
 function err(t){$('error').style.display='block';$('error').textContent=t}
 async function setUnavailable(){ await refreshMarket(); }
+let refreshInProgress=false;
 async function refreshMarket(){
+  if(refreshInProgress) return;
+  refreshInProgress=true;
   try{
     const interval=({'5m':'5m','15m':'15m','1h':'1h','4h':'4h'})[tf]||'15m';
-    const [tickRes,barsRes]=await Promise.all([
+    const [tickRes,barsRes,htfRes]=await Promise.all([
       fetch('https://biquote.io/api/XAUUSD?allowStale=false',{cache:'no-store'}),
-      fetch('https://biquote.io/api/XAUUSD/ohlc?interval='+interval+'&limit=120',{cache:'no-store'})
+      fetch('https://biquote.io/api/XAUUSD/ohlc?interval='+interval+'&limit=120',{cache:'no-store'}),
+      fetch('https://biquote.io/api/XAUUSD/ohlc?interval=4h&limit=120',{cache:'no-store'})
     ]);
     if(!tickRes.ok) throw new Error('XAUUSD quote HTTP '+tickRes.status);
     if(!barsRes.ok) throw new Error('XAUUSD candles HTTP '+barsRes.status);
     const tick=await tickRes.json(), payload=await barsRes.json();
+    const htfPayload=htfRes.ok?await htfRes.json():{bars:[]};
     const bars=(payload.bars||[]).filter(b=>Number.isFinite(+b.close)&&Number.isFinite(+b.open));
     if(!bars.length) throw new Error('No XAUUSD candles in feed');
     const px=Number(tick.mid||((Number(tick.bid)+Number(tick.ask))/2)||tick.last);
     if(!Number.isFinite(px)||px<=0) throw new Error('Invalid XAUUSD quote');
+    // Higher-timeframe (4H) simplified OB zones: opposite candle before a strong displacement.
+    const hb=(htfPayload.bars||[]).filter(b=>Number.isFinite(+b.open)&&Number.isFinite(+b.close)&&Number.isFinite(+b.high)&&Number.isFinite(+b.low));
+    let bullZone=null,bearZone=null;
+    if(hb.length>=4){
+      const hclosed=hb.filter(b=>!b.isOpen), hd=hclosed.length>=4?hclosed:hb;
+      const hRanges=hd.slice(-20).map(b=>+b.high- +b.low).filter(x=>x>0);
+      const hAvg=hRanges.length?hRanges.reduce((a,b)=>a+b,0)/hRanges.length:0;
+      for(let i=Math.max(0,hd.length-25);i<hd.length-1;i++){
+        const b=hd[i],n=hd[i+1],rng=+n.high- +n.low;
+        if(rng>=hAvg*1.15 && +b.close<+b.open && +n.close>+n.open && +n.close>+b.high) bullZone={low:+b.low,high:+b.open,kind:'OB'};
+        if(rng>=hAvg*1.15 && +b.close>+b.open && +n.close<+n.open && +n.close<+b.low) bearZone={low:+b.open,high:+b.high,kind:'OB'};
+      }
+      // Fallback keeps the requested HTF support/resistance visible when no strict displacement OB is detected.
+      // These are recent opposite-candle zones and are explicitly labelled as proxy zones.
+      for(let i=hd.length-2;i>=Math.max(0,hd.length-30);i--){
+        const b=hd[i];
+        if(!bullZone && +b.close<+b.open) bullZone={low:+b.low,high:+b.open,kind:'proxy'};
+        if(!bearZone && +b.close>+b.open) bearZone={low:+b.open,high:+b.high,kind:'proxy'};
+        if(bullZone&&bearZone) break;
+      }
+    }
+    const fmtPrice=n=>Number.isFinite(n)?n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
+    $('htfSupport').textContent=bullZone?fmtPrice(bullZone.low)+' – '+fmtPrice(bullZone.high)+(bullZone.kind==='proxy'?' · proxy':''):'Unavailable';
+    $('htfResistance').textContent=bearZone?fmtPrice(bearZone.low)+' – '+fmtPrice(bearZone.high)+(bearZone.kind==='proxy'?' · proxy':''):'Unavailable';
+    $('htfBias').textContent=bullZone&&px>=bullZone.low&&px<=bullZone.high?'Bullish OB retest':bearZone&&px>=bearZone.low&&px<=bearZone.high?'Bearish OB retest':bullZone&&px>bullZone.high?'Support below price':bearZone&&px<bearZone.low?'Resistance above price':'No active retest';
+    $('htfBias').className='pill '+((bullZone&&px>=bullZone.low&&px<=bullZone.high)?'good':(bearZone&&px>=bearZone.low&&px<=bearZone.high)?'bad':'warn');
+    // Build a directional plan only when price is near a detected 4H OB; otherwise show no setup.
+    let plan=null;
+    if(bullZone && px>=bullZone.low && px<=bullZone.high){const entry=px,sl=bullZone.low-(bullZone.high-bullZone.low)*0.15,risk=entry-sl;if(risk>0)plan={entry,sl,tp1:entry+2*risk,tp2:entry+3*risk,side:'BUY'};}
+    else if(bearZone && px>=bearZone.low && px<=bearZone.high){const entry=px,sl=bearZone.high+(bearZone.high-bearZone.low)*0.15,risk=sl-entry;if(risk>0)plan={entry,sl,tp1:entry-2*risk,tp2:entry-3*risk,side:'SELL'};}
+    else if(bullZone && px>bullZone.high){const entry=bullZone.high,sl=bullZone.low-(bullZone.high-bullZone.low)*0.15,risk=entry-sl;if(risk>0)plan={entry,sl,tp1:entry+2*risk,tp2:entry+3*risk,side:'BUY LIMIT · zone edge'};}
+    else if(bearZone && px<bearZone.low){const entry=bearZone.low,sl=bearZone.high+(bearZone.high-bearZone.low)*0.15,risk=sl-entry;if(risk>0)plan={entry,sl,tp1:entry-2*risk,tp2:entry-3*risk,side:'SELL LIMIT · zone edge'};}
+    $('planEntry').textContent=plan?plan.side+' · '+fmtPrice(plan.entry):'No usable zone';
+    $('planSL').textContent=plan?fmtPrice(plan.sl):'—';
+    $('planTP1').textContent=plan?fmtPrice(plan.tp1):'—';
+    $('planTP2').textContent=plan?fmtPrice(plan.tp2):'—';
     const bid=Number(tick.bid),ask=Number(tick.ask),spr=Number(tick.spread);
     $('price').textContent=px.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
     $('change').textContent=(Number.isFinite(bid)&&Number.isFinite(ask))?'Bid '+bid.toFixed(2)+' · Ask '+ask.toFixed(2):'Mid quote · bid/ask unavailable';
@@ -104,9 +145,18 @@ async function refreshMarket(){
     const spreadOk=Number.isFinite(spr)?spr>0&&spr<2.5:false;
     let dir='WAIT',score=0;
     const diff=Math.abs(long-short),need=total>0?Math.ceil(total*0.6):99;
-    if(spreadOk&&long>=need&&long>short){dir='BUY';score=Math.min(99,50+Math.round(49*long/Math.max(1,total)))}
-    else if(spreadOk&&short>=need&&short>long){dir='SELL';score=Math.min(99,50+Math.round(49*short/Math.max(1,total)))}
-    else score=Math.min(49,20+diff*6);
+    // Strict mode: show BUY/SELL only when the directional score reaches 90/99.
+    // Otherwise retain WAIT to avoid presenting weaker setups as strong signals.
+    if(spreadOk&&long>=need&&long>short){
+      const candidateScore=Math.min(99,50+Math.round(49*long/Math.max(1,total)));
+      if(candidateScore>=90){dir='BUY';score=candidateScore;}
+      else score=candidateScore;
+    } else if(spreadOk&&short>=need&&short>long){
+      const candidateScore=Math.min(99,50+Math.round(49*short/Math.max(1,total)));
+      if(candidateScore>=90){dir='SELL';score=candidateScore;}
+      else score=candidateScore;
+    } else score=Math.min(49,20+diff*6);
+    if(dir==='WAIT' && score>=50) $('summary').textContent='Setup score '+score+'/99 hai, lekin strong-signal threshold 90 hai. WAIT — 90+ confirmation ka intezar karein.';
     const alpha=1+(closes.length>6?(closes.at(-1)/closes.at(-6)-1):0);
     // Proxy only: candles do not reveal true aggressor-side volume. Use tickVolume when provided;
     // otherwise weight each candle equally and label results as proxies, never real Delta/CVD.
@@ -134,7 +184,7 @@ async function refreshMarket(){
     $('signal').textContent=dir;$('signal').className='word '+(dir==='BUY'?'buy':dir==='SELL'?'sell':'wait');
     $('score').innerHTML=String(score)+'<span style="font-size:12px;color:var(--muted)">/99</span>';
     $('fill').style.width=score+'%';$('fill').style.background=dir==='BUY'?'var(--g)':dir==='SELL'?'var(--r)':'var(--a)';
-    $('summary').textContent=dir==='WAIT'?'Order Block / ICT proxy clear agreement nahi dete, spread unavailable/high hai, ya systems OFF hain.':'Combined heuristic: '+dir+'; Order Blocks, ICT proxy aur EMA trend align hue. Score probability nahi hai.';
+    $('summary').textContent=dir==='WAIT'?(score>=50?'Setup score '+score+'/99 hai, lekin BUY/SELL ke liye 90+ chahiye. WAIT — strong confirmation ka intezar karein.':'Order Block / ICT proxy clear agreement nahi dete, spread unavailable/high hai, ya systems OFF hain.'):'VERY STRONG '+dir+' signal · score '+score+'/99. Combined heuristic alignment; score probability nahi hai.';
     check('dc',deltaProxy>0?'Proxy bullish':deltaProxy<0?'Proxy bearish':'Proxy neutral',deltaProxy>0?'good':deltaProxy<0?'bad':'warn');check('cc',cvdProxy>0?'Proxy rising':cvdProxy<0?'Proxy falling':'Proxy flat',cvdProxy>0?'good':cvdProxy<0?'bad':'warn');
     check('tc',trend,trend==='BULLISH'?'good':trend==='BEARISH'?'bad':'warn');
     check('sc',spreadOk?'Acceptable':'High/unavailable',spreadOk?'good':'bad');
@@ -145,6 +195,7 @@ async function refreshMarket(){
     $('systemsState').className='pill '+((obOn||ictOn)?'good':'warn');
     $('moduleNote').textContent='Delta/CVD/imbalance candle-direction proxies hain; tickVolume available ho toh use hota hai. Yeh real aggressor Delta, true CVD ya footprint imbalance nahi hain. OB/ICT logic bhi heuristic hai, exact Pine port nahi.';
     $('error').style.display='none';
+    refreshInProgress=false;
   }catch(e){
     $('status').textContent='Feed unavailable';$('dot').style.background='var(--r)';
     $('price').textContent='—';$('change').textContent='Quote unavailable';
@@ -153,6 +204,7 @@ async function refreshMarket(){
     $('score').innerHTML='—<span style="font-size:12px;color:var(--muted)">/99</span>';
     ['delta','cvd','imb','spread','alpha','trend'].forEach(id=>$(id).textContent='N/A');
     err('Free XAUUSD feed unavailable: '+e.message+'. Data unavailable hone par signal calculate nahi kiya gaya.');
+    refreshInProgress=false;
   }
 }
 function check(id,t,c){$(id).textContent=t;$(id).className='pill '+c}
@@ -170,5 +222,5 @@ function updateSystems(){
 }
 $('obToggle').addEventListener('change',updateSystems);
 $('ictToggle').addEventListener('change',updateSystems);
-chart();setUnavailable();updateSystems();setInterval(refreshMarket,15000);
+chart();setUnavailable();updateSystems();setInterval(refreshMarket,1000);
 </script></body></html>
